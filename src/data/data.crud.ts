@@ -66,6 +66,9 @@ export const createBookmark = async (bookmark: Bookmark) => {
     ref(database, `users/${auth.currentUser?.uid}/bookmarks/`)
   );
 
+  bookmark.dateAdded = new Date().toISOString();
+  bookmark.dateLastUpdated = new Date().toISOString();
+
   await set(newBookmarkRef, bookmark);
   return Boolean(newBookmarkRef.key);
 };
@@ -81,7 +84,7 @@ export const updateBookmark = async (updatedBookmark: Bookmark) => {
       database,
       `users/${auth.currentUser?.uid}/bookmarks/${updatedBookmark.id ?? ""}`
     );
-    updatedBookmark.dateLastUpdated = new Date();
+    updatedBookmark.dateLastUpdated = new Date().toISOString();
     await update(bookmarkRef, updatedBookmark);
   } catch (exception) {
     return false;
